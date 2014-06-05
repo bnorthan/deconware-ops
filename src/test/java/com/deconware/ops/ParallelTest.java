@@ -13,6 +13,7 @@ import org.junit.Assert;
 import com.deconware.algorithms.StaticFunctions;
 import com.deconware.ops.statistics.SumRealTypeParallel;
 import com.deconware.ops.arithmetic.div.DivideIntervalByIntervalP;
+import com.deconware.ops.arithmetic.add.AddIntervalWithIntervalP;
 
 public class ParallelTest extends AbstractOpsTest
 {
@@ -71,7 +72,7 @@ public class ParallelTest extends AbstractOpsTest
 	}
 	
 	@Test
-	public void TestDivide()
+	public void TestArithmetic()
 	{
 		long xSize=2550;
 		long ySize=2550;
@@ -103,7 +104,31 @@ public class ParallelTest extends AbstractOpsTest
 			// make sure the normalized sums are equal within the epsilon
 			Assert.assertEquals(f2/f1, fout, (float)eps);
 		}
+		
+		// reset cursors
+		c1.reset();
+		c2.reset();
+		cout.reset();
+		
+		Op add=new AddIntervalWithIntervalP<FloatType>();
+		
+		ops.run(add, img1, img2, out);
+		
+		for (FloatType f:img1)
+		{
+			c1.fwd();
+			c2.fwd();
+			cout.fwd();
+			
+			float f1=c1.get().getRealFloat();
+			float f2=c2.get().getRealFloat();
+			float fout=cout.get().getRealFloat();
+			
+			// make sure the normalized sums are equal within the epsilon
+			Assert.assertEquals(f2+f1, fout, (float)eps);
+		}
 	}
+	
 
 }
 
