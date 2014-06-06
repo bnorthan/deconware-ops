@@ -3,7 +3,6 @@ package com.deconware.ops.statistics;
 import net.imagej.ops.Op;
 import net.imagej.ops.statistics.Sum;
 import net.imagej.ops.AbstractFunction;
-
 import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 
@@ -11,7 +10,7 @@ import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
 
 import com.deconware.algorithms.parallel.ReductionChunker;
-import com.deconware.algorithms.parallel.arithmetic.ParallelSum;
+import com.deconware.algorithms.parallel.math.ParallelSum;
 
 /**
 * Multi-threaded version of sum 

@@ -14,13 +14,14 @@ import com.deconware.algorithms.StaticFunctions;
 import com.deconware.ops.statistics.SumRealTypeParallel;
 import com.deconware.ops.arithmetic.div.DivideIntervalByIntervalP;
 import com.deconware.ops.arithmetic.add.AddIntervalWithIntervalP;
+import com.deconware.ops.math.dot.DotProductRealTypeParallel;
 
 public class ParallelTest extends AbstractOpsTest
 {
 	double eps=0.000001;
 
 	@Test
-	public void TestAdd()
+	public void TestAddSumDot()
 	{
 		long xSize=2550;
 		long ySize=2550;
@@ -68,6 +69,13 @@ public class ParallelTest extends AbstractOpsTest
 		
 		// make sure the normalized sums are equal within the epsilon
 		Assert.assertEquals(sum2/sum2, sum3/sum2, eps);
+		
+		// create a dot product op
+		Op dot=new DotProductRealTypeParallel<DoubleType, DoubleType>();
+		
+		ops.run(dot, in, in, out);
+		
+		System.out.println("dot product is: "+out);
 		
 	}
 	

@@ -11,7 +11,7 @@ import org.scijava.Priority;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-import com.deconware.algorithms.parallel.arithmetic.ParallelDivide;
+import com.deconware.algorithms.parallel.math.ParallelDivide;
 
 /**
  * 
