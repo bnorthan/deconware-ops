@@ -3,7 +3,6 @@ package com.deconware.ops.arithmetic.div;
 import net.imagej.ops.Op;
 import net.imagej.ops.Contingent;
 import net.imglib2.IterableInterval;
-import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ItemIO;

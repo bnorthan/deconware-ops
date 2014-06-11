@@ -11,7 +11,7 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-@Plugin(type = Op.class, name = "RichardsonLucy")
+//@Plugin(type = Op.class, name = "RichardsonLucy")
 public class RichardsonLucy<T extends RealType<T>, S extends RealType<S>> 
 		extends AbstractFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<S>> 
 		implements Op, Contingent
@@ -35,6 +35,6 @@ public class RichardsonLucy<T extends RealType<T>, S extends RealType<S>>
 	@Override
 	public boolean conforms() 
 	{
-		return true;
+		return false;
 	}
 }
