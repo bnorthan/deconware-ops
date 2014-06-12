@@ -26,7 +26,8 @@ public class SlicerTest extends AbstractOpsTest
 				
 		int[] axisIndices=new int[3];
 		
-		// set up the axis so we loop through channels and time
+		// set up the axis so the resulting hyperslices are x,y,z and 
+		// we loop through channels and time
 		axisIndices[0]=0;
 		axisIndices[1]=1;
 		axisIndices[2]=3;
