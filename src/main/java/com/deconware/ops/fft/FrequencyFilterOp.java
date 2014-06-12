@@ -39,15 +39,6 @@ public abstract class FrequencyFilterOp<T extends RealType<T>, S extends RealTyp
 	@Override
 	public void run()
 	{
-		System.out.println("Convolution True North Wrapper");
-			
-		System.out.println("input dim: "+input.dimension(0)+" "+input.dimension(1)+" "+input.dimension(2));
-		System.out.println("kernel dim: "+kernel.dimension(0)+" "+kernel.dimension(1)+" "+kernel.dimension(2));
-			
-		output = input.copy();
-			
-		System.out.println("output dim: "+output.dimension(0)+" "+output.dimension(1)+" "+output.dimension(2));
-		
 		FrequencyFilter<T,S> filter=createAlgorithm();
 		
 		filter.process();
