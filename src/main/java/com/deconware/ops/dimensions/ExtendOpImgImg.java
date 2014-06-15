@@ -54,7 +54,10 @@ public class ExtendOpImgImg <T extends RealType<T>> extends
 	
 		final RandomAccessible< T > temp = Views.extend( input, outOfBoundsFactory );
 		
-		final RandomAccessibleInterval<T> extendedInput = Views.offsetInterval(temp, utility.getOffset(), utility.getNewDimensions());
+		long[] offset=utility.getOffset();
+		long[] newDimensions=utility.getNewDimensions();
+		
+		final RandomAccessibleInterval<T> extendedInput = Views.offsetInterval(temp, offset, newDimensions);
 		
 		// if the output is null create it based on the input
 		if (output==null)
