@@ -11,6 +11,7 @@ import org.scijava.plugin.Plugin;
 import net.imagej.ops.Contingent;
 
 import com.deconware.algorithms.parallel.math.ParallelDot;
+
 /**
 * Multi-threaded version of dot product 
 *
