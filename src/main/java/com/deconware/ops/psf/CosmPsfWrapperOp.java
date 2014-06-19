@@ -1,9 +1,19 @@
 package com.deconware.ops.psf;
 
 import net.imagej.ops.Op;
+import net.imagej.ops.OpService;
+import net.imagej.ops.slicer.CroppedIterableInterval;
+import net.imglib2.Cursor;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.IterableInterval;
 import net.imglib2.img.Img;
+import net.imglib2.img.ImgFactory;
+import net.imglib2.img.cell.CellImgFactory;
+import net.imglib2.meta.AxisType;
 import net.imglib2.meta.ImgPlus;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.view.Views;
+import net.imglib2.meta.Axes;
 
 import org.scijava.ItemIO;
 import org.scijava.Priority;
@@ -14,13 +24,21 @@ import com.deconware.algorithms.psf.PsfGenerator;
 import com.deconware.algorithms.psf.FlipPsfQuadrants;
 import com.deconware.algorithms.psf.PsfGenerator.PsfType;
 import com.deconware.algorithms.psf.PsfGenerator.PsfModel;
-import com.deconware.ops.math.dot.DotProduct;
 
 @Plugin(type = Op.class, name = Psf.NAME, priority = Priority.HIGH_PRIORITY + 10)
 public class CosmPsfWrapperOp implements Psf
 {
+	@Parameter
+	private OpService ops;
+	
+	 // TODO: because of limitation of COSMOS library PSFs need to be the same size
+	 // in x and y for now.  This is OK.  Padding can be done to make the arrays the 
+	 // same size
 	 @Parameter 
-	 long[] size;
+	 long xySize;
+	 
+	 @Parameter
+	 long zSize;
 	 
 	 /**
 	  * x, y, and z spacing in nanometer
@@ -32,7 +50,7 @@ public class CosmPsfWrapperOp implements Psf
 	  * emission wavelength in nanometer
 	  */
 	 @Parameter
-	 float emissionWavelength;
+	 float[] emissionWavelength;
 	 
 	 /**
 	  * numerical aperture
@@ -93,14 +111,14 @@ public class CosmPsfWrapperOp implements Psf
 	 
 	 
 	 @Parameter(type = ItemIO.OUTPUT, required=false)
-	Img<FloatType> output;
+	 Img<FloatType> output;
 	 
 	 @Override
 	 public void run()
 	 {
-		 System.out.println("size: "+size[0]+" "+size[1]+" "+size[2]);
+		 System.out.println("size: "+xySize+" "+zSize);
 		 System.out.println("spacing: "+spacing[0]+spacing[1]+spacing[2]);
-		 System.out.println("emissionWavelength "+emissionWavelength);
+		 System.out.println("emissionWavelength "+emissionWavelength[0]);
 		 System.out.println("numericalAperture "+numericalAperture);
 		 System.out.println("actualImmersionOilRefractiveIndex "+actualImmersionOilRefractiveIndex);
 		 System.out.println("actualSpecimenLayerRefractiveIndex "+actualSpecimenLayerRefractiveIndex);
@@ -110,25 +128,70 @@ public class CosmPsfWrapperOp implements Psf
 		 System.out.println("designImmersionOilRefractiveIndex "+actualImmersionOilRefractiveIndex);
 		 System.out.println("designSpecimenLayerRefractiveIndex "+actualSpecimenLayerRefractiveIndex);
 		
+		 if (output==null)
+		 {
+			// create a planer image factory
+			ImgFactory<FloatType> imgFactory = new CellImgFactory<FloatType>();
+			
+			// 4 dimensionsal image
+			long[] dims=new long[4];
+			dims[0]=xySize;
+			dims[1]=xySize;
+			dims[2]=zSize;
+			dims[3]=emissionWavelength.length;
+			
+			// use the image factory to create an img
+			output = imgFactory.create(dims, new FloatType());
+			
+			AxisType[] axes=new AxisType[4];
+			
+			axes[0]=Axes.X;
+			axes[1]=Axes.Y;
+			axes[2]=Axes.Z;
+			axes[3]=Axes.CHANNEL;
+			
+			output = new ImgPlus<FloatType>(output, "psf", axes);
+		 }
+		 
+		 
+		 // set up the axis so the resulting hyperslices are x,y,z and 
+		 // we loop through channels and time
+		 int[] axisIndices=new int[]{0,1,2};
+		 	
+		 CroppedIterableInterval hyperSlices= new CroppedIterableInterval(ops, output,
+				 axisIndices);
 
-		 output=PsfGenerator.CallGeneratePsf(new int[]{(int)size[0],(int)size[1],(int)size[2]}, 
-				 spacing, 
-				 emissionWavelength, // multiply by 1000 because COSM expect nanos
-				 numericalAperture, 
-				 designImmersionOilRefractiveIndex, 
-				 designSpecimenLayerRefractiveIndex, 
-				 actualImmersionOilRefractiveIndex,
-				actualSpecimenLayerRefractiveIndex,
-				actualPointSourceDepthInSpecimenLayer,
-				psfType ,
-				psfModel);
-		 
-		if (centerPsf)
-		{
-			output=FlipPsfQuadrants.flip(output, output.factory(), new int[]{(int)size[0],(int)size[1],(int)size[2]});
-		}
-		 
-		output=new ImgPlus(output, "psf");
+		 Cursor<RandomAccessibleInterval<?>> c=hyperSlices.cursor();
+
+		 int channel=0;
+ 
+		 while(c.hasNext())
+		 {
+			 c.fwd();
+			 
+			 RandomAccessibleInterval<FloatType> interval=
+					 (RandomAccessibleInterval<FloatType>)c.get();
+
+			 IterableInterval iterable=Views.iterable(interval);
 		
+			 Img<FloatType> psf=PsfGenerator.CallGeneratePsf(new int[]{(int)xySize,(int)xySize,(int)zSize}, 
+					 spacing, 
+					 emissionWavelength[channel], 
+					 numericalAperture, 
+					 designImmersionOilRefractiveIndex, 
+					 designSpecimenLayerRefractiveIndex, 
+					 actualImmersionOilRefractiveIndex,
+					 actualSpecimenLayerRefractiveIndex,
+					 actualPointSourceDepthInSpecimenLayer,
+					 psfType ,
+					 psfModel);
+ 
+			 channel++;
+ 
+			 if (centerPsf)
+			 {
+				 FlipPsfQuadrants.flip(psf, interval, new int[]{(int)xySize,(int)xySize,(int)zSize});
+			 }
+		 }	 
 	 }
 }
