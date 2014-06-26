@@ -9,6 +9,7 @@ import net.imglib2.IterableInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.img.cell.CellImgFactory;
+import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.meta.AxisType;
 import net.imglib2.meta.ImgPlus;
 import net.imglib2.type.numeric.real.FloatType;
@@ -128,11 +129,12 @@ public class CosmPsfWrapperOp implements Psf
 		 System.out.println("designImmersionOilRefractiveIndex "+actualImmersionOilRefractiveIndex);
 		 System.out.println("designSpecimenLayerRefractiveIndex "+actualSpecimenLayerRefractiveIndex);
 		
-		 if (output==null)
+		 if ( (output==null) && (emissionWavelength.length>1) )
 		 {
 			// create a planer image factory
-			ImgFactory<FloatType> imgFactory = new CellImgFactory<FloatType>();
-			
+			//ImgFactory<FloatType> imgFactory = new CellImgFactory<FloatType>();
+			ImgFactory<FloatType> imgFactory = new ArrayImgFactory<FloatType>();
+				
 			// 4 dimensionsal image
 			long[] dims=new long[4];
 			dims[0]=xySize;
@@ -150,6 +152,28 @@ public class CosmPsfWrapperOp implements Psf
 			axes[2]=Axes.Z;
 			axes[3]=Axes.CHANNEL;
 			
+			output = new ImgPlus<FloatType>(output, "psf", axes);
+		 }
+		 else if ( (output==null) && (emissionWavelength.length==1))
+		 {
+			// create a planer image factory
+			ImgFactory<FloatType> imgFactory = new CellImgFactory<FloatType>();
+				
+			// 3 dimensionsal image
+			long[] dims=new long[3];
+			dims[0]=xySize;
+			dims[1]=xySize;
+			dims[2]=zSize;
+			
+			// use the image factory to create an img
+			output = imgFactory.create(dims, new FloatType());
+				
+			AxisType[] axes=new AxisType[3];
+				
+			axes[0]=Axes.X;
+			axes[1]=Axes.Y;
+			axes[2]=Axes.Z;
+				
 			output = new ImgPlus<FloatType>(output, "psf", axes);
 		 }
 		 
@@ -171,6 +195,8 @@ public class CosmPsfWrapperOp implements Psf
 			 
 			 RandomAccessibleInterval<FloatType> interval=
 					 (RandomAccessibleInterval<FloatType>)c.get();
+			 
+			
 
 			 IterableInterval iterable=Views.iterable(interval);
 		
