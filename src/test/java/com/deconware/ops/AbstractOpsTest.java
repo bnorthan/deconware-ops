@@ -44,6 +44,7 @@ import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
+import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Intervals;
 
 import org.junit.After;
@@ -148,5 +149,21 @@ public abstract class AbstractOpsTest {
 			}
 
 			return ArrayImgs.doubles(array, dims);
+		}
+	
+	public Img<FloatType> generateFloatTestImg(final boolean fill,
+			final long... dims)
+		{
+			final float[] array =
+				new float[(int) Intervals.numElements(new FinalInterval(dims))];
+
+			if (fill) {
+				seed = 17;
+				for (int i = 0; i < array.length; i++) {
+					array[i] = (float) pseudoRandom();
+				}
+			}
+
+			return ArrayImgs.floats(array, dims);
 		}
 }
