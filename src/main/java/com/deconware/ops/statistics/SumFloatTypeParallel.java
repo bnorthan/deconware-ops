@@ -21,7 +21,7 @@ import com.deconware.algorithms.parallel.math.ParallelSum;
 @Plugin(type = Op.class, name = Sum.NAME, priority = Priority.HIGH_PRIORITY + 10)
 public class SumFloatTypeParallel<T extends RealType<T>> implements Op, Contingent
 {
-	@Parameter
+	@Parameter(type = ItemIO.INPUT)
 	private IterableInterval<T> in;
 	
 	@Parameter(type = ItemIO.OUTPUT)

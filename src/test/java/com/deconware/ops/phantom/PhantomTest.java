@@ -1,7 +1,9 @@
 package com.deconware.ops.phantom;
 
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.type.Type;
 import net.imglib2.img.Img;
+import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.meta.AxisType;
 import net.imglib2.meta.Axes;
@@ -18,7 +20,7 @@ import com.deconware.ops.AbstractOpsTest;
 
 public class PhantomTest extends AbstractOpsTest
 {
-	public static Img<FloatType> makeMultiChannelPhantom(OpService ops, int xSize, int ySize, int numSlices, int numChannels, int radius)
+	public static<T extends RealType<T>> Img<T> makeMultiChannelPhantom(OpService ops, int xSize, int ySize, int numSlices, int numChannels, int radius, Type type)
 	{
 		int[] size=new int[4];
 		size[0]=xSize;
@@ -28,7 +30,7 @@ public class PhantomTest extends AbstractOpsTest
 
 		AxisType[] ax=new AxisType[]{Axes.X, Axes.Y, Axes.Z, Axes.CHANNEL};
      
-		Img<FloatType> testImage=(Img<FloatType>)ops.run("create", size, new FloatType());
+		Img<T> testImage=(Img<T>)ops.run("create", size, type);
 
 		int[] location=new int[3];
 		location[0]=40;
@@ -37,7 +39,7 @@ public class PhantomTest extends AbstractOpsTest
 		
 		for (int c=0;c<numChannels;c++)
 		{
-			RandomAccessibleInterval<FloatType> hyperSlice= 
+			RandomAccessibleInterval<T> hyperSlice= 
 					Views.hyperSlice(testImage, 3, c);
 			
 			ops.run("addsphere",  hyperSlice, location, 1.0, radius);
@@ -56,7 +58,7 @@ public class PhantomTest extends AbstractOpsTest
 		int numChannels=3;
 		int radius =10;
 
-		Img<FloatType> testImage=makeMultiChannelPhantom(ops, xSize, ySize, numSlices, numChannels, radius);
+		Img<FloatType> testImage=makeMultiChannelPhantom(ops, xSize, ySize, numSlices, numChannels, radius, new FloatType());
 
 		float sum1=0.0f;
 		for (int c=0;c<numChannels;c++)

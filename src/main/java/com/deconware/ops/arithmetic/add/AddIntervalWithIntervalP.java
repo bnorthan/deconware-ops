@@ -12,6 +12,8 @@ import org.scijava.plugin.Plugin;
 
 import com.deconware.algorithms.parallel.math.ParallelAdd;
 
+import org.scijava.plugin.Parameter;
+
 @Plugin(type = Op.class, name = Add.NAME, priority = Priority.HIGH_PRIORITY)
 public class AddIntervalWithIntervalP<T extends RealType<T>> implements Add
 {
