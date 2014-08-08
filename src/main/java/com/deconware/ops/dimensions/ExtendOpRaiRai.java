@@ -2,11 +2,8 @@ package com.deconware.ops.dimensions;
 
 import net.imagej.ops.AbstractFunction;
 import net.imagej.ops.Op;
-import net.imagej.ops.OpService;
-import net.imglib2.meta.ImgPlus;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.view.Views;
 
 import org.scijava.Priority;
@@ -16,13 +13,19 @@ import org.scijava.plugin.Plugin;
 import com.deconware.algorithms.dim.ExtendImageUtility;
 import com.deconware.algorithms.dim.ExtendImageUtility.BoundaryType;
 import com.deconware.algorithms.fft.SimpleFFTFactory.FFTTarget;
-import com.deconware.ops.utility.StaticUtilities;
 
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
 
+/**
+ * Extends an RAI over all dimensions
+ * 
+ * @author bnorthan
+ *
+ * @param <T>
+ */
 @Plugin(type = Op.class, name = Extend.NAME, priority=Priority.HIGH_PRIORITY+1)
 public class ExtendOpRaiRai <T extends RealType<T>> extends
 AbstractFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>  {
@@ -41,7 +44,7 @@ AbstractFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>  {
 		RandomAccessibleInterval<T> output)
 	{
 		
-		ExtendImageUtility utility=new ExtendImageUtility(extension, input, boundaryType, fftTarget);
+		ExtendImageUtility<T> utility=new ExtendImageUtility<T>(extension, input, boundaryType, fftTarget);
 		
 		OutOfBoundsFactory< T, RandomAccessibleInterval<T> > outOfBoundsFactory= utility.getOutOfBoundsFactory(); 
 	
@@ -84,5 +87,3 @@ AbstractFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>  {
 		this.fftTarget=fftTarget;
 	}
 }
-
-

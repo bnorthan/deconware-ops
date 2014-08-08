@@ -26,7 +26,7 @@ public abstract class FrequencyFilterOpRaiRai<T extends RealType<T>, S extends R
 	@Parameter(type = ItemIO.INPUT)
 	RandomAccessibleInterval<S> kernel;
 	
-	@Parameter(type = ItemIO.OUTPUT)
+	@Parameter(type = ItemIO.BOTH)
 	RandomAccessibleInterval<T> output;
 	
 	/**
@@ -38,12 +38,7 @@ public abstract class FrequencyFilterOpRaiRai<T extends RealType<T>, S extends R
 	
 	@Override
 	public void run()
-	{;
-		for (int d=0;d<input.numDimensions();d++)
-		{
-			System.out.println("in in out "+input.dimension(d)+" "+kernel.dimension(d)+" "+output.dimension(d));
-		}
-		
+	{		
 		FrequencyFilter<T,S> filter=createAlgorithm();
 		
 		filter.process();

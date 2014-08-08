@@ -15,8 +15,6 @@ import com.deconware.ops.AbstractOpsTest;
 import com.deconware.algorithms.dim.ExtendImageUtility.BoundaryType;
 import com.deconware.algorithms.fft.SimpleFFTFactory.FFTTarget;
 
-import edu.mines.jtk.sgl.Axis;
-
 public class ExtensionTest extends AbstractOpsTest
 {
 	@Test
@@ -44,7 +42,8 @@ public class ExtensionTest extends AbstractOpsTest
 		extensions[1]=20;
 		extensions[2]=10;
 		
-		Op extend=new ExtendOp();
+		Op extend=new ExtendOp<UnsignedByteType>();
+		
 		
 		RandomAccessibleInterval<UnsignedByteType> out=
 				(RandomAccessibleInterval<UnsignedByteType>)ops.run(extend, null, testImage, 

@@ -17,6 +17,13 @@ import com.deconware.algorithms.dim.ExtendImageUtility;
 import com.deconware.algorithms.dim.ExtendImageUtility.BoundaryType;
 import com.deconware.algorithms.fft.SimpleFFTFactory.FFTTarget;
 
+/**
+ * extends an RAI along dimensions defined by axisIndices
+ * 
+ * @author bnorthan
+ *
+ * @param <T>
+ */
 @Plugin(type = Op.class, name = Extend.NAME)
 public class ExtendOp <T extends RealType<T>> extends
 	AbstractFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> implements Extend
@@ -42,7 +49,7 @@ public class ExtendOp <T extends RealType<T>> extends
 			return null;
 		}
 		
-		ExtendImageUtility utility=new ExtendImageUtility(axisIndices, extension, input, boundaryType, fftTarget);
+		ExtendImageUtility<T> utility=new ExtendImageUtility<T>(axisIndices, extension, input, boundaryType, fftTarget);
 		
 		OutOfBoundsFactory< T, RandomAccessibleInterval<T> > outOfBoundsFactory= utility.getOutOfBoundsFactory(); 
 				

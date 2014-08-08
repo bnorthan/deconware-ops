@@ -1,14 +1,12 @@
 package com.deconware.ops.fft;
 
 import com.deconware.ops.AbstractOpsTest;
+import com.deconware.ops.SpatialIterableInterval;
 import com.deconware.ops.phantom.PhantomTest;
 
-import net.imagej.ops.Contingent;
 import net.imagej.ops.Op;
-import net.imagej.ops.OpService;
 import net.imagej.ops.slicer.CroppedIterableInterval;
 import net.imglib2.Cursor;
-import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
@@ -16,45 +14,125 @@ import net.imglib2.meta.ImgPlus;
 import net.imglib2.meta.Axes;
 import net.imglib2.meta.AxisType;
 import net.imglib2.type.numeric.integer.UnsignedIntType;
+import net.imglib2.type.numeric.integer.LongType;
 import net.imglib2.type.numeric.real.FloatType;
-import net.imglib2.util.Intervals;
-import net.imglib2.view.Views;
 
 import org.junit.Test;
 import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
 
 public class ConvolutionTest extends AbstractOpsTest
 {
 	@Test
 	public void FrequencyFilterMapTest()
 	{
+		// define dimensions for a multi-channel dataset
 		int xSize=100;
 		int ySize=100;
 		int zSize=100;
 		int channels=5;
+		int timePoints=10;
 		
-		long totalsize=xSize*ySize*zSize*channels;
+		// create a 5d input image
+		Img<UnsignedIntType> input5D=PhantomTest.makeMultiChannelMultiTimePointPhantom(ops, xSize, ySize, zSize, channels, timePoints, 10, new UnsignedIntType());
 		
-		int[] size=new int[]{xSize,ySize,zSize,channels};
+		// create a 4d input image (channels but no timepoints)
+		Img<UnsignedIntType> input4D=PhantomTest.makeMultiChannelPhantom(ops, xSize, ySize, zSize, channels, 5, new UnsignedIntType());
 		
-		final int[] array =
-				new int[(int) totalsize];
+		// create a 4d kernel
+		Img<UnsignedIntType> kernel=PhantomTest.makeMultiChannelPhantom(ops, xSize, ySize, zSize, channels, 20, new UnsignedIntType());
+			
+		// define the axis types for the 5d data
+		AxisType[] axInput = new AxisType[5];
+    axInput[0]=Axes.X;
+    axInput[1]=Axes.Y;
+    axInput[2]=Axes.Z;
+    axInput[3]=Axes.CHANNEL;
+    axInput[4]=Axes.TIME;
+    
+    // define the axis types for the 4d data
+		AxisType[] axKernel = new AxisType[4];
+    axKernel[0]=Axes.X;
+    axKernel[1]=Axes.Y;
+    axKernel[2]=Axes.Z;
+    axKernel[3]=Axes.CHANNEL;
+    
+    // wrap Imgs with ImgPlus, pass in the axis info. 
+    ImgPlus<UnsignedIntType> inputPlus4D=new ImgPlus<UnsignedIntType>(input4D, "", axInput);
+    ImgPlus<UnsignedIntType> inputPlus5D=new ImgPlus<UnsignedIntType>(input5D, "", axInput);
+    ImgPlus<UnsignedIntType> kernelPlus=new ImgPlus<UnsignedIntType>(kernel, "", axKernel);
+		
+		System.out.println("Test 4D:==========================");
+		
+		ImgPlus<UnsignedIntType> output=null;
+		
+		// verify output
+		CroppedIterableInterval inputIterable=SpatialIterableInterval.getSpatialIterableInterval(ops, inputPlus4D);
+		CroppedIterableInterval kernelIterable=SpatialIterableInterval.getSpatialIterableInterval(ops, kernelPlus);
+			
+		Cursor<RandomAccessibleInterval<?>> inputCursor=inputIterable.cursor();
+		Cursor<RandomAccessibleInterval<?>> kernelCursor=kernelIterable.cursor();
+		
+		int numberVolumes=channels*timePoints;
+		long[] inSums=new long[numberVolumes];
+		
+		LongType inSum = new LongType();
+		LongType outSum = new LongType();
 
-		Img<UnsignedIntType> image1=ArrayImgs.unsignedInts(array, xSize, ySize, zSize, channels);
+		// calculate sum of input and kernel
+		int i=0;
+		while (inputCursor.hasNext()) {
+			inputCursor.fwd();
+			kernelCursor.fwd();
+				
+			RandomAccessibleInterval<UnsignedIntType> inputRAI=(RandomAccessibleInterval<UnsignedIntType>)inputCursor.get();
+			RandomAccessibleInterval<UnsignedIntType> kernelRAI=(RandomAccessibleInterval<UnsignedIntType>)kernelCursor.get();
 		
-		Op fmap=new FrequencyFilterMap<FloatType>();
+			ops.run("sum", inSum, inputRAI);
+			inSums[i]=inSum.getIntegerLong();
+			i++;
+			//System.out.println(StaticFunctions.sum2(inputRAI));
+			//System.out.println(StaticFunctions.sum2(kernelRAI));
+		}
 		
-		int[] axisIndices=new int[]{0,1,2};
-		
+		// run the test op
 		try
 		{
-			ops.run(fmap, new CroppedIterableInterval(ops, image1,
-					axisIndices) );
+			output=(ImgPlus<UnsignedIntType>)(ops.run("frequencyfilter", inputPlus4D, kernelPlus, new FFTTestOpRaiRai()));
 		}
 		catch(Exception e)
 		{
 			int stop=5;
 		}
+		
+		// verify output
+		CroppedIterableInterval outputIterable=SpatialIterableInterval.getSpatialIterableInterval(ops, output);
+		Cursor<RandomAccessibleInterval<?>> outputCursor=outputIterable.cursor();
+		
+		i=0;
+		while (outputCursor.hasNext()) {
+			outputCursor.fwd();
+			
+			RandomAccessibleInterval<UnsignedIntType> outRAI=(RandomAccessibleInterval<UnsignedIntType>)outputCursor.get();
+			
+			ops.run("sum", outSum, outRAI);
+			
+			System.out.println(i);
+			assertEquals(2*inSums[i], outSum.getIntegerLong());
+			i++;
+			
+		}
+/*		System.out.println("Test 5D:==========================");
+		
+		try
+		{
+			Op fmap=new FFTTestOpImgPlusImgPlus<FloatType, FloatType>();
+			ops.run(fmap, inputPlus5D, kernelPlus);
+		}
+		catch(Exception e)
+		{
+			System.out.println("e: "+e);
+		}*/
 	}
 	
 	//@Test
@@ -92,7 +170,7 @@ public class ConvolutionTest extends AbstractOpsTest
 		Assert.assertEquals(sum1*sum2, sum3, 0.00001);
 	}
 	
-	//@Test
+	@Test
 	public void Convolution4DTest()
 	{
 		int numChannels=5;
@@ -106,8 +184,6 @@ public class ConvolutionTest extends AbstractOpsTest
 		
 		Assert.assertEquals(image1.dimension(3), numChannels);
 		Assert.assertEquals(image2.dimension(3), numChannels);
-	
-		ops.run("spatial", image1);
 		
 		// wrap as image plus
 		AxisType[] axes=new AxisType[4];
@@ -120,8 +196,8 @@ public class ConvolutionTest extends AbstractOpsTest
 		ImgPlus<UnsignedIntType> ip2=new ImgPlus(image1, "", axes);
 		
 		// convolve
-		Img<UnsignedIntType> convolved=(Img<UnsignedIntType>)ops.run("convolution", ip1, ip2);
-		
+		Img<UnsignedIntType> convolved=(ImgPlus<UnsignedIntType>)(ops.run("frequencyfilter", ip1, ip2, new ConvolutionRaiRai()));
+	
 		System.out.println("convolved number dimensions: "+convolved.numDimensions());
 		// confirm we have a 4D image
 		Assert.assertEquals(4, convolved.numDimensions());
@@ -155,9 +231,9 @@ public class ConvolutionTest extends AbstractOpsTest
 			Float sum2=(Float)ops.run("sum", i2);
 			Float sum3=(Float)ops.run("sum", c);
 			
+			System.out.println("sums "+":"+sum1+":"+sum2+":"+sum3);
+			
 			Assert.assertEquals(sum1*sum2, sum3, 0.00001);
 		}
 	}
-	
-	
 }

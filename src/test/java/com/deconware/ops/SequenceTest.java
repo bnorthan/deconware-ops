@@ -3,6 +3,7 @@ package com.deconware.ops;
 import net.imglib2.img.Img;
 import net.imglib2.meta.Axes;
 import net.imglib2.meta.AxisType;
+import net.imglib2.meta.CalibratedAxis;
 import net.imglib2.meta.ImgPlus;
 import net.imglib2.type.numeric.integer.UnsignedIntType;
 
@@ -10,8 +11,6 @@ import org.junit.Test;
 import org.junit.Assert;
 
 import com.deconware.ops.phantom.PhantomTest;
-
-import net.imagej.ops.slicer.SlicewiseRAI2RAI;
 
 public class SequenceTest extends AbstractOpsTest
 {
@@ -49,11 +48,23 @@ public class SequenceTest extends AbstractOpsTest
     ax[0]=Axes.X;
     ax[1]=Axes.Y;
     ax[2]=Axes.Z;
-    ax[3]=Axes.TIME;
+    ax[3]=Axes.CHANNEL;
     
     ImgPlus<UnsignedIntType> plus1=new ImgPlus<UnsignedIntType>(image1, "", ax);
     ImgPlus<UnsignedIntType> plus2=new ImgPlus<UnsignedIntType>(image2, "", ax);
 		
+    CalibratedAxis  axis=plus1.axis(0);
+    Assert.assertEquals(axis.type(), Axes.X);
+    
+    axis=plus1.axis(1);
+    Assert.assertEquals(axis.type(), Axes.Y);
+    
+    axis=plus1.axis(2);
+    Assert.assertEquals(axis.type(), Axes.Z);
+    
+    axis=plus1.axis(3);
+    Assert.assertEquals(axis.type(), Axes.CHANNEL);
+    
 		try
 		{
 			ops.run("spatialmapper", plus1, plus2, index);
@@ -62,6 +73,5 @@ public class SequenceTest extends AbstractOpsTest
 		{
 			int stop=5;
 		}
-		
 	}
-}
+	}

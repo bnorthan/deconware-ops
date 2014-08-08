@@ -20,7 +20,20 @@ import com.deconware.ops.AbstractOpsTest;
 
 public class PhantomTest extends AbstractOpsTest
 {
-	public static<T extends RealType<T>> Img<T> makeMultiChannelPhantom(OpService ops, int xSize, int ySize, int numSlices, int numChannels, int radius, Type type)
+	/**
+	 * Creates a multi-channel phantom containing a sphere at each channel
+	 * 
+	 * @param ops - scijava op service
+	 * @param xSize - x size in pixels
+	 * @param ySize - y size in pixels
+	 * @param numSlices - number of slices (z)
+	 * @param numChannels - number of channels
+	 * @param radius - radius of sphere
+	 * @param type - pixel type
+	 * @return
+	 */
+	public static<T extends RealType<T>> Img<T> makeMultiChannelPhantom(OpService ops, int xSize, int ySize, int numSlices, 
+		int numChannels, int radius, Type type)
 	{
 		int[] size=new int[4];
 		size[0]=xSize;
@@ -28,8 +41,6 @@ public class PhantomTest extends AbstractOpsTest
 		size[2]=numSlices;
 		size[3]=numChannels;
 
-		AxisType[] ax=new AxisType[]{Axes.X, Axes.Y, Axes.Z, Axes.CHANNEL};
-     
 		Img<T> testImage=(Img<T>)ops.run("create", size, type);
 
 		int[] location=new int[3];
@@ -47,6 +58,92 @@ public class PhantomTest extends AbstractOpsTest
 		}
 		
 		return testImage;
+	}
+	
+	/**
+	 * create a 5d (multiple channels and slices) phantom
+	 * 
+	 * @param ops - scijava op service
+	 * @param xSize - x size in pixels
+	 * @param ySize - y size in pixels
+	 * @param numSlices - number of slices (z)
+	 * @param numChannels - number of channels
+	 * @param numTimePoints - number of time points
+	 * @param radius - radius of sphere
+	 * @param type - pixel type
+	 * @return
+	 */
+	public static<T extends RealType<T>> Img<T> makeMultiChannelMultiTimePointPhantom(OpService ops, int xSize, int ySize, int numSlices, int numChannels, int numTimePoints, int radius, Type type)
+	{
+		int[] size=new int[5];
+		size[0]=xSize;
+		size[1]=ySize;
+		size[2]=numSlices;
+		size[3]=numChannels;
+		size[4]=numTimePoints;
+
+		Img<T> testImage=(Img<T>)ops.run("create", size, type);
+
+		int[] location=new int[3];
+		location[0]=40;
+		location[1]=size[1]/2;
+		location[2]=size[2]/2;
+		
+		for (int t=0;t<numTimePoints;t++)
+		{
+			RandomAccessibleInterval<T> timeSlice= 
+					Views.hyperSlice(testImage, 4, t);
+			
+			for (int c=0;c<numChannels;c++)
+			{
+				
+				RandomAccessibleInterval<T> hyperSlice= 
+						Views.hyperSlice(timeSlice, 3, c);
+				
+				ops.run("addsphere",  hyperSlice, location, t+c, radius);
+			}
+		}
+		
+		return testImage;
+	}
+	
+	@Test
+	public void MultiTimePhantomTest()
+	{
+		int xSize=40;
+		int ySize=50;
+		int numSlices=25;
+		int numChannels=3;
+		int numTime=10;
+		int radius =10;
+		
+		Img<FloatType> testImage=makeMultiChannelMultiTimePointPhantom(ops, xSize, ySize, numSlices, numChannels, numTime, radius, new FloatType());
+
+		float sum1=0.0f;
+		for (int t=0;t<numTime;t++)
+		{
+			RandomAccessibleInterval<FloatType> timeSlice= 
+					Views.hyperSlice(testImage, 4, t);
+			
+			for (int c=0;c<numChannels;c++)
+			{
+				
+				RandomAccessibleInterval<FloatType> hyperSlice= 
+						Views.hyperSlice(timeSlice, 3, c);
+				
+				Object sum=ops.run("sum", Views.iterable(hyperSlice));
+				sum1+=(Float)sum;
+				
+				System.out.println("sum channel:time: "+c+":"+t+":"+sum);
+			}
+		}
+		
+		Float sum2=(Float)ops.run("sum", testImage);
+		System.out.println("tum2otal sum "+sum2);
+		
+		// the accumalitive sum of each channel (sum1) should be equal to the total sum
+		Assert.assertEquals(sum1, sum2, 0.00001);
+		
 	}
 	
 	@Test
@@ -109,7 +206,5 @@ public class PhantomTest extends AbstractOpsTest
 		int accumulator=0;
 		
 		System.out.println("acc: "+accumulator);
-
-		
 	}
 }

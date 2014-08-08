@@ -1,14 +1,10 @@
 package com.deconware.ops.dimensions;
 
-import java.util.Iterator;
-
 import net.imagej.ops.AbstractFunction;
 import net.imagej.ops.Op;
 import net.imagej.ops.OpService;
-import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.meta.AxisType;
 import net.imglib2.meta.Axes;
 import net.imglib2.meta.ImgPlus;
@@ -58,10 +54,9 @@ AbstractFunction<ImgPlus<T>, ImgPlus<T>>  {
 		extension[2]=extensionZ;
 		axis[2]=zPos;
 
-		
 		if (output==null)
 		{
-			ExtendImageUtility utility=new ExtendImageUtility(axis, extension, input, boundaryType, fftTarget);
+			ExtendImageUtility<T> utility=new ExtendImageUtility<T>(axis, extension, input, boundaryType, fftTarget);
 
 			long[] newDimensions=utility.getNewDimensions();
 			AxisType[] axes=new AxisType[input.numDimensions()];
@@ -76,32 +71,15 @@ AbstractFunction<ImgPlus<T>, ImgPlus<T>>  {
 			output=new ImgPlus<T>(outputImg, "", axes);
 		}
 		
-		ExtendOpRaiRai extend= new ExtendOpRaiRai();
+		ExtendOpRaiRai<T> extend= new ExtendOpRaiRai<T>();
 		
 		extend.setExtension(extension);
 		extend.setBoundaryType(boundaryType);
 		extend.setFFTTarget(fftTarget);
 		
-		ops.run("spatialmapper", input, output, extend);
+		ops.run("spatialwise", output, input, extend);
 		
 		return output; 
 	}
-	
-	class DummyOp extends
-	AbstractFunction<Iterable<ByteType>, Iterable<ByteType>> {
-
-@Override
-public Iterable<ByteType> compute(final Iterable<ByteType> input,
-		final Iterable<ByteType> output) {
-	final Iterator<ByteType> itA = input.iterator();
-	final Iterator<ByteType> itB = output.iterator();
-
-	while (itA.hasNext() && itB.hasNext()) {
-		itB.next().set(itA.next().get());
-	}
-	return output;
-}
-
-}
 
 }
