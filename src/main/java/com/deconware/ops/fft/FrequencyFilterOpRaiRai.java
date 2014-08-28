@@ -26,7 +26,7 @@ public abstract class FrequencyFilterOpRaiRai<T extends RealType<T>, S extends R
 	@Parameter(type = ItemIO.INPUT)
 	RandomAccessibleInterval<S> kernel;
 	
-	@Parameter(type = ItemIO.BOTH)
+	@Parameter(type = ItemIO.BOTH, required=false)
 	RandomAccessibleInterval<T> output;
 	
 	/**

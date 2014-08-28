@@ -11,7 +11,7 @@ import com.deconware.algorithms.fft.filters.Convolution;
 
 import com.deconware.algorithms.StaticFunctions;
 
-@Plugin(type = Op.class, name = "convolution", priority = Priority.NORMAL_PRIORITY)
+@Plugin(type = Op.class, name = "ffttestop", priority = Priority.NORMAL_PRIORITY)
 public class FFTTestOpRaiRai<T extends RealType<T>, S extends RealType<S>> 
 		extends FrequencyFilterOpRaiRai<T,S>
 {

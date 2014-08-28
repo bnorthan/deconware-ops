@@ -1,10 +1,12 @@
-package com.deconware.ops;
+package com.deconware.ops.fft;
 
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
 import org.junit.Assert;
+
+import com.deconware.ops.AbstractOpsTest;
 
 public class DeconvolutionOpsTest extends AbstractOpsTest
 {
@@ -26,7 +28,7 @@ public class DeconvolutionOpsTest extends AbstractOpsTest
 	// depth below coverslip in microns
 	float depth=10;
 
-	@Test
+	//@Test
 	public void TestDeconvolutionProcess2D()
 	{
 		setUpVolumeDimensions(2);
@@ -44,7 +46,7 @@ public class DeconvolutionOpsTest extends AbstractOpsTest
 		
 		Float sum=(Float)ops.run("sum", psf);
 		
-		System.out.println("PSF sum is: "+sum+" "+sum.getClass());
+		System.out.println("PSF sum is: "+sum);
 		
 		// assert the total sum of the PSF is 1.0
 		Assert.assertEquals(1.0, sum, 0.001);
@@ -53,6 +55,20 @@ public class DeconvolutionOpsTest extends AbstractOpsTest
 		
 		// confirm we have a 3D image
 		Assert.assertEquals(image.numDimensions(), 3);
+		
+		int[] location = new int[] { size[0] / 2, size[1] / 2, size[2] / 2 };
+		
+		ops.run("addsphere", image, location, 1.0, 5);
+		
+		sum=(Float)ops.run("sum", image);
+		System.out.println("PSF sum is: "+sum);
+		
+		Img<FloatType> out= (Img<FloatType>)ops.create(size, new FloatType());
+		
+		ops.run("convolution", image, psf, out);
+		
+		sum=(Float)ops.run("sum", out);
+		System.out.println("Out sum is: "+sum);
 		
 		
 /*		ops.convolve(out, in, kernel);
@@ -67,7 +83,7 @@ public class DeconvolutionOpsTest extends AbstractOpsTest
 	*/			
 	}
 	
-	@Test
+	//@Test
 	public void TestDeconvolutionProcess4D()
 	{
 		setUpVolumeDimensions(3);
@@ -120,7 +136,7 @@ public class DeconvolutionOpsTest extends AbstractOpsTest
 		Assert.assertEquals(4, convolved.numDimensions());
 	}
 	
-	@Test
+	//@Test
 	public void TestDeconvolutionProcess5D()
 	{
 		
