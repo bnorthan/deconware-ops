@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.Assert;
 
 import com.deconware.ops.AbstractOpsTest;
+import net.imagej.ops.Op;
 
 public class DeconvolutionOpsTest extends AbstractOpsTest
 {
@@ -63,9 +64,19 @@ public class DeconvolutionOpsTest extends AbstractOpsTest
 		sum=(Float)ops.run("sum", image);
 		System.out.println("PSF sum is: "+sum);
 		
+		Img<FloatType> convolved= (Img<FloatType>)ops.create(size, new FloatType());
+		
+		ops.run("convolution", image, psf, convolved);
+		
+		sum=(Float)ops.run("sum", convolved);
+		System.out.println("Convolved sum is: "+sum);
+		
 		Img<FloatType> out= (Img<FloatType>)ops.create(size, new FloatType());
 		
-		ops.run("convolution", image, psf, out);
+		//Op rl=ops.op("richardsonlucy", convolved, psf, out, 15);
+		//ops.run(rl);
+		
+		ops.run("totalvariationrl", convolved, psf, out, 25, 0.002);
 		
 		sum=(Float)ops.run("sum", out);
 		System.out.println("Out sum is: "+sum);
