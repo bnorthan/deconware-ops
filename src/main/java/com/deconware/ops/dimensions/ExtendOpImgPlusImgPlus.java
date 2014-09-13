@@ -14,6 +14,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import com.deconware.algorithms.dim.ExtendImageUtility;
+import com.deconware.algorithms.dim.ExtendImageUtility.ExtensionType;
 import com.deconware.algorithms.dim.ExtendImageUtility.BoundaryType;
 import com.deconware.algorithms.fft.SimpleFFTFactory.FFTTarget;
 
@@ -25,10 +26,16 @@ AbstractFunction<ImgPlus<T>, ImgPlus<T>>  {
 	OpService ops;
 	
 	@Parameter
-	int extensionXY;
+	int extensionX;
+	
+	@Parameter
+	int extensionY;
 	
 	@Parameter
 	int extensionZ;
+	
+	@Parameter(required = false)
+	ExtensionType extensionType;
 	
 	@Parameter(required = false)
 	BoundaryType boundaryType;
@@ -43,11 +50,11 @@ AbstractFunction<ImgPlus<T>, ImgPlus<T>>  {
 		int[] axis=new int[3];
 		
 		int xPos=input.dimensionIndex(Axes.X);
-		extension[0]=extensionXY;
+		extension[0]=extensionX;
 		axis[0]=xPos;
 		
 		int yPos=input.dimensionIndex(Axes.Y);
-		extension[1]=extensionXY;
+		extension[1]=extensionY;
 		axis[1]=yPos;
 		
 		int zPos=input.dimensionIndex(Axes.Z);
@@ -56,7 +63,7 @@ AbstractFunction<ImgPlus<T>, ImgPlus<T>>  {
 
 		if (output==null)
 		{
-			ExtendImageUtility<T> utility=new ExtendImageUtility<T>(axis, extension, input, boundaryType, fftTarget);
+			ExtendImageUtility<T> utility=new ExtendImageUtility<T>(axis, extension, input, extensionType, boundaryType, fftTarget);
 
 			long[] newDimensions=utility.getNewDimensions();
 			AxisType[] axes=new AxisType[input.numDimensions()];
@@ -74,6 +81,7 @@ AbstractFunction<ImgPlus<T>, ImgPlus<T>>  {
 		ExtendOpRaiRai<T> extend= new ExtendOpRaiRai<T>();
 		
 		extend.setExtension(extension);
+		extend.setExtensionType(extensionType);
 		extend.setBoundaryType(boundaryType);
 		extend.setFFTTarget(fftTarget);
 		

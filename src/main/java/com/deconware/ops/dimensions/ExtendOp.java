@@ -14,6 +14,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import com.deconware.algorithms.dim.ExtendImageUtility;
+import com.deconware.algorithms.dim.ExtendImageUtility.ExtensionType;
 import com.deconware.algorithms.dim.ExtendImageUtility.BoundaryType;
 import com.deconware.algorithms.fft.SimpleFFTFactory.FFTTarget;
 
@@ -49,7 +50,7 @@ public class ExtendOp <T extends RealType<T>> extends
 			return null;
 		}
 		
-		ExtendImageUtility<T> utility=new ExtendImageUtility<T>(axisIndices, extension, input, boundaryType, fftTarget);
+		ExtendImageUtility<T> utility=new ExtendImageUtility<T>(axisIndices, extension, input, ExtensionType.EXTENSION, boundaryType, fftTarget);
 		
 		OutOfBoundsFactory< T, RandomAccessibleInterval<T> > outOfBoundsFactory= utility.getOutOfBoundsFactory(); 
 				

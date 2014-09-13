@@ -12,6 +12,7 @@ import org.scijava.plugin.Plugin;
 
 import com.deconware.algorithms.dim.ExtendImageUtility;
 import com.deconware.algorithms.dim.ExtendImageUtility.BoundaryType;
+import com.deconware.algorithms.dim.ExtendImageUtility.ExtensionType;
 import com.deconware.algorithms.fft.SimpleFFTFactory.FFTTarget;
 
 import net.imglib2.Cursor;
@@ -36,6 +37,9 @@ AbstractFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>  {
 	@Parameter(required = false)
 	BoundaryType boundaryType;
 	
+	@Parameter(required=false)
+	ExtensionType extensionType;
+	
 	@Parameter(required = false)
 	FFTTarget fftTarget;
 	
@@ -44,7 +48,7 @@ AbstractFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>  {
 		RandomAccessibleInterval<T> output)
 	{
 		
-		ExtendImageUtility<T> utility=new ExtendImageUtility<T>(extension, input, boundaryType, fftTarget);
+		ExtendImageUtility<T> utility=new ExtendImageUtility<T>(extension, input, extensionType, boundaryType, fftTarget);
 		
 		OutOfBoundsFactory< T, RandomAccessibleInterval<T> > outOfBoundsFactory= utility.getOutOfBoundsFactory(); 
 	
@@ -75,6 +79,11 @@ AbstractFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>  {
 	void setExtension(int[] extension)
 	{
 		this.extension=extension;
+	}
+	
+	void setExtensionType(ExtensionType extensionType)
+	{
+		this.extensionType=extensionType;
 	}
 	
 	void setBoundaryType(BoundaryType boundaryType)

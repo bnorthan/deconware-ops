@@ -68,15 +68,15 @@ public class FrequencyFilterOpImgPlusImgPlus<T extends RealType<T>, S extends Re
 			int inputChannelIndex = input.dimensionIndex(Axes.CHANNEL);
 			int kernelChannelIndex = kernel.dimensionIndex(Axes.CHANNEL);
 
-			// get the channel position of the input
-			int currentChannelPosition =
-				inputCursor.getIntPosition(inputChannelIndex);
-
 			RandomAccessibleInterval<S> kernelRAI = null;
 
-			// if the input has channels then extract a hyperslice at the current
+			// if the kernel has channels then extract a hyperslice at the current
 			// channel
-			if (kernelChannelIndex != -1) {
+			if ( (kernelChannelIndex != -1) && (inputChannelIndex!=-1) ) {
+			// get the channel position of the input
+				int currentChannelPosition =
+					inputCursor.getIntPosition(inputChannelIndex);
+
 				kernelRAI =
 					Views.hyperSlice(kernel, kernelChannelIndex, currentChannelPosition);
 			}
