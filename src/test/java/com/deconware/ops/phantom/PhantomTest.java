@@ -3,7 +3,9 @@ package com.deconware.ops.phantom;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.Type;
 import net.imglib2.img.Img;
+import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.meta.AxisType;
 import net.imglib2.meta.Axes;
@@ -32,7 +34,7 @@ public class PhantomTest extends AbstractOpsTest
 	 * @param type - pixel type
 	 * @return
 	 */
-	public static<T extends RealType<T>> Img<T> makeMultiChannelPhantom(OpService ops, int xSize, int ySize, int numSlices, 
+	public static<T extends NativeType<T>> Img<T> makeMultiChannelPhantom(OpService ops, int xSize, int ySize, int numSlices, 
 		int numChannels, int radius, Type type)
 	{
 		int[] size=new int[4];
@@ -40,8 +42,9 @@ public class PhantomTest extends AbstractOpsTest
 		size[1]=ySize;
 		size[2]=numSlices;
 		size[3]=numChannels;
-
-		Img<T> testImage=(Img<T>)ops.run("create", size, type);
+		
+		
+		Img<T> testImage=(Img<T>)ops.run("createimg", new ArrayImgFactory<T>(), type, size);
 
 		int[] location=new int[3];
 		location[0]=40;

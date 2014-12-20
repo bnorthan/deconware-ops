@@ -1,10 +1,7 @@
 package com.deconware.ops.fft;
 
-import com.deconware.algorithms.StaticFunctions;
-
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.IterableInterval;
 
 import net.imglib2.exception.IncompatibleTypeException;
 
@@ -13,7 +10,6 @@ import net.imglib2.img.ImgFactory;
 
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
-import net.imglib2.view.Views;
 
 import com.deconware.algorithms.fft.filters.LinearFilter;
 

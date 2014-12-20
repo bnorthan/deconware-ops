@@ -2,7 +2,7 @@ package com.deconware.ops.statistics;
 
 import net.imagej.ops.Op;
 import net.imagej.ops.statistics.Sum;
-import net.imagej.ops.AbstractFunction;
+import net.imagej.ops.AbstractStrictFunction;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 
@@ -20,7 +20,7 @@ import com.deconware.algorithms.parallel.math.ParallelSum;
 */
 @Plugin(type = Op.class, name = Sum.NAME, priority = Priority.HIGH_PRIORITY + 10)
 public class SumRealTypeParallel<T extends RealType<T>, V extends RealType<V>> extends
-	AbstractFunction<IterableInterval<T>, V> implements Sum<IterableInterval<T>, V>, Contingent 
+	AbstractStrictFunction<IterableInterval<T>, V> implements Sum<IterableInterval<T>, V>, Contingent 
 {
 
 	@Override

@@ -15,7 +15,7 @@ import net.imglib2.meta.Axes;
 import net.imagej.ops.Contingent;
 import net.imagej.ops.Op;
 import net.imagej.ops.OpService;
-import net.imagej.ops.slicer.CroppedIterableInterval;
+import net.imagej.ops.slicer.Hyperslice;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
@@ -51,9 +51,9 @@ public class FrequencyFilterOpImgPlusImgPlus<T extends RealType<T>, S extends Re
 		output = new ImgPlus<T>(outputImg, input);
 
 		// get an iterable and a cursor to loop through volumes over the input
-		CroppedIterableInterval inputIterable =
+		Hyperslice inputIterable =
 			SpatialIterableInterval.getSpatialIterableInterval(opService, input);
-		CroppedIterableInterval outputIterable =
+		Hyperslice outputIterable =
 			SpatialIterableInterval.getSpatialIterableInterval(opService, output);
 
 		Cursor inputCursor = inputIterable.cursor();

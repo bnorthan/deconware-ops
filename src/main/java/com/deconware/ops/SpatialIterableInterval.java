@@ -1,16 +1,12 @@
 package com.deconware.ops;
 
 import net.imagej.ops.OpService;
-import net.imagej.ops.slicer.CroppedIterableInterval;
-import net.imglib2.Cursor;
-import net.imglib2.RandomAccessibleInterval;
+import net.imagej.ops.slicer.Hyperslice;
 
 import java.util.ArrayList;
 
-import net.imglib2.type.numeric.RealType;
 import net.imglib2.meta.Axes;
 import net.imglib2.meta.ImgPlus;
-import net.imglib2.meta.AxisType;
 
 /**
  * 
@@ -31,7 +27,7 @@ public class SpatialIterableInterval
 	 * @return - a cursor set up to loop through spatial dimensions
 	 * 					 null if the cursor couldn't be created
 	 */
-	public static<T> CroppedIterableInterval getSpatialIterableInterval(final OpService opService,
+	public static<T> Hyperslice getSpatialIterableInterval(final OpService opService,
 			final ImgPlus<T> source)
 	{
 		ArrayList<Integer> spatialList=new ArrayList<Integer>();
@@ -58,6 +54,6 @@ public class SpatialIterableInterval
 			axesOfInterest[d]=spatialList.get(d);
 		}
 		
-		return new CroppedIterableInterval(opService, source, axesOfInterest);
+		return new Hyperslice(opService, source, axesOfInterest);
 	}
 }

@@ -6,7 +6,7 @@ import com.deconware.ops.SpatialIterableInterval;
 import com.deconware.ops.phantom.PhantomTest;
 
 import net.imagej.ops.Op;
-import net.imagej.ops.slicer.CroppedIterableInterval;
+import net.imagej.ops.slicer.Hyperslice;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -75,9 +75,9 @@ public class ConvolutionTest extends AbstractOpsTest {
 
 		ImgPlus<UnsignedIntType> output = null;
 
-		CroppedIterableInterval inputIterable =
+		Hyperslice inputIterable =
 			SpatialIterableInterval.getSpatialIterableInterval(ops, inputPlus4D);
-		CroppedIterableInterval kernelIterable =
+		Hyperslice kernelIterable =
 			SpatialIterableInterval.getSpatialIterableInterval(ops, kernelPlus);
 
 		Cursor<RandomAccessibleInterval<?>> inputCursor = inputIterable.cursor();
@@ -117,7 +117,7 @@ public class ConvolutionTest extends AbstractOpsTest {
 		}
 
 		
-		CroppedIterableInterval outputIterable =
+		Hyperslice outputIterable =
 			SpatialIterableInterval.getSpatialIterableInterval(ops, output);
 		Cursor<RandomAccessibleInterval<?>> outputCursor = outputIterable.cursor();
 
@@ -221,12 +221,12 @@ public class ConvolutionTest extends AbstractOpsTest {
 
 		int[] axisIndices = new int[] { 0, 1, 2 };
 
-		CroppedIterableInterval hsImage1 =
-			new CroppedIterableInterval(ops, image1, axisIndices);
-		CroppedIterableInterval hsImage2 =
-			new CroppedIterableInterval(ops, image2, axisIndices);
-		CroppedIterableInterval hsConvolved =
-			new CroppedIterableInterval(ops, convolved, axisIndices);
+		Hyperslice hsImage1 =
+			new Hyperslice(ops, image1, axisIndices);
+		Hyperslice hsImage2 =
+			new Hyperslice(ops, image2, axisIndices);
+		Hyperslice hsConvolved =
+			new Hyperslice(ops, convolved, axisIndices);
 
 		Cursor<RandomAccessibleInterval<?>> ci1 = hsImage1.cursor();
 		Cursor<RandomAccessibleInterval<?>> ci2 = hsImage2.cursor();

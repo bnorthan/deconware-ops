@@ -1,6 +1,6 @@
 package com.deconware.ops;
 
-import net.imagej.ops.slicer.CroppedIterableInterval;
+import net.imagej.ops.slicer.Hyperslice;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -32,7 +32,7 @@ public class SlicerTest extends AbstractOpsTest
 		axisIndices[1]=1;
 		axisIndices[2]=3;
 		
-		CroppedIterableInterval hyperSlices= new CroppedIterableInterval(ops, testImage,
+		Hyperslice hyperSlices= new Hyperslice(ops, testImage,
 				axisIndices);
 		
 		Cursor<RandomAccessibleInterval<?>> c=hyperSlices.cursor();

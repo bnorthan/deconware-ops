@@ -1,6 +1,6 @@
 package com.deconware.ops.arithmetic.add;
 
-import net.imagej.ops.arithmetic.add.Add;
+import net.imagej.ops.Ops.Add;
 import net.imagej.ops.Op;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;

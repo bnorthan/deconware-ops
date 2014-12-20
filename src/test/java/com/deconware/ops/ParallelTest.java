@@ -118,7 +118,7 @@ public class ParallelTest extends AbstractOpsTest
 		c2.reset();
 		cout.reset();
 		
-		Op add=new AddIntervalWithIntervalP<FloatType>();
+		Op add=(Op)new AddIntervalWithIntervalP<FloatType>();
 		
 		ops.run(add, img1, img2, out);
 		
