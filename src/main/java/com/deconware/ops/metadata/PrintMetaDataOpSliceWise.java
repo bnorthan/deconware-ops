@@ -12,7 +12,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.Cursor;
 import net.imglib2.type.numeric.RealType;
 
-import net.imagej.ops.slicer.CroppedIterableInterval;
+import net.imagej.ops.slicer.Hyperslice;
 
 @Plugin(type = Op.class, name = "metadata", priority = Priority.HIGH_PRIORITY)
 public class PrintMetaDataOpSliceWise <T extends RealType<T>> implements Op 
@@ -29,7 +29,7 @@ public class PrintMetaDataOpSliceWise <T extends RealType<T>> implements Op
 	@Override
 	public void run()
 	{
-		CroppedIterableInterval hyperSlices= new CroppedIterableInterval(opService, input,
+		Hyperslice hyperSlices= new Hyperslice(opService, input,
 				axisIndices);
 		
 		Cursor<RandomAccessibleInterval<?>> c=hyperSlices.cursor();

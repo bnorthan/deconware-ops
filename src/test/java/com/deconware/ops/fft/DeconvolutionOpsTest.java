@@ -52,7 +52,7 @@ public class DeconvolutionOpsTest extends AbstractOpsTest
 		// assert the total sum of the PSF is 1.0
 		Assert.assertEquals(1.0, sum, 0.001);
 		
-		Img<FloatType> image=(Img<FloatType>)ops.run("create", size,  new FloatType());
+		Img<FloatType> image=(Img<FloatType>)ops.run("createimg",  new FloatType(), null, size);
 		
 		// confirm we have a 3D image
 		Assert.assertEquals(image.numDimensions(), 3);
@@ -64,14 +64,14 @@ public class DeconvolutionOpsTest extends AbstractOpsTest
 		sum=(Float)ops.run("sum", image);
 		System.out.println("PSF sum is: "+sum);
 		
-		Img<FloatType> convolved= (Img<FloatType>)ops.create(size, new FloatType());
+		Img<FloatType> convolved= (Img<FloatType>)ops.createimg(new FloatType(), null, size);
 		
 		ops.run("convolution", image, psf, convolved);
 		
 		sum=(Float)ops.run("sum", convolved);
 		System.out.println("Convolved sum is: "+sum);
 		
-		Img<FloatType> out= (Img<FloatType>)ops.create(size, new FloatType());
+		Img<FloatType> out= (Img<FloatType>)ops.createimg(new FloatType(), null, size);
 		
 		//Op rl=ops.op("richardsonlucy", convolved, psf, out, 15);
 		//ops.run(rl);

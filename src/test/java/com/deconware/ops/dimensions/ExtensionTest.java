@@ -17,7 +17,7 @@ import com.deconware.algorithms.fft.SimpleFFTFactory.FFTTarget;
 
 public class ExtensionTest extends AbstractOpsTest
 {
-	@Test
+	//@Test
 	public void ExtendHyperSlicesTest()
 	{
 		int xSize=40;

@@ -1,6 +1,6 @@
 package com.deconware.ops;
 
-
+/*
 
 import net.imagej.ops.AbstractFunction;
 import net.imagej.ops.Function;
@@ -15,7 +15,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
- */
+ 
 @Plugin(type = Op.class, name = SpatialWise.NAME,
 	priority = Priority.VERY_HIGH_PRIORITY)
 public class SpatialWiseImgPlusImgPlus<I, O> extends
@@ -41,12 +41,12 @@ public class SpatialWiseImgPlusImgPlus<I, O> extends
 		 opService.run("map", outputInterval, inputInterval,
 				func);
 
-	/*	opService.run("map", new CroppedIterableInterval(opService, output,
-			axisIndices), new CroppedIterableInterval(opService, input, axisIndices),
-			func);*/
+	//	opService.run("map", new CroppedIterableInterval(opService, output,
+		//	axisIndices), new CroppedIterableInterval(opService, input, axisIndices),
+		//	func);
 
 		return output;
 	}
 
-}
+}*/
 

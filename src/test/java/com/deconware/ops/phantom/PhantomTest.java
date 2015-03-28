@@ -44,7 +44,7 @@ public class PhantomTest extends AbstractOpsTest
 		size[3]=numChannels;
 		
 		
-		Img<T> testImage=(Img<T>)ops.run("createimg", new ArrayImgFactory<T>(), type, size);
+		Img<T> testImage=(Img<T>)ops.run("createimg", type, new ArrayImgFactory<T>(), size);
 
 		int[] location=new int[3];
 		location[0]=40;
@@ -85,7 +85,7 @@ public class PhantomTest extends AbstractOpsTest
 		size[3]=numChannels;
 		size[4]=numTimePoints;
 
-		Img<T> testImage=(Img<T>)ops.run("create", size, type);
+		Img<T> testImage=(Img<T>)ops.run("createimg", type, null, size);
 
 		int[] location=new int[3];
 		location[0]=40;
@@ -192,7 +192,7 @@ public class PhantomTest extends AbstractOpsTest
 	{
 		int[] size=new int[]{100,100,100};
 		
-		Img<FloatType> testImage=(Img<FloatType>)ops.run("create", size, new FloatType());
+		Img<FloatType> testImage=(Img<FloatType>)ops.run("createimg", new FloatType(), null, size);
 
 		int[] location=new int[]{50, 50, 50};
 	

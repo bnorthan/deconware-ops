@@ -1,9 +1,7 @@
 package com.deconware.ops.dimensions;
 
-import net.imagej.ops.AbstractFunction;
+import net.imagej.ops.AbstractStrictFunction;
 import net.imagej.ops.Op;
-import net.imglib2.Cursor;
-import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
@@ -27,7 +25,7 @@ import com.deconware.algorithms.fft.SimpleFFTFactory.FFTTarget;
  */
 @Plugin(type = Op.class, name = Extend.NAME)
 public class ExtendOp <T extends RealType<T>> extends
-	AbstractFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> implements Extend
+	AbstractStrictFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> implements Extend
 {
 	@Parameter
 	int[] axisIndices;

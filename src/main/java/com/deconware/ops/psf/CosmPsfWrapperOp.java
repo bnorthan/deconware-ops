@@ -2,7 +2,7 @@ package com.deconware.ops.psf;
 
 import net.imagej.ops.Op;
 import net.imagej.ops.OpService;
-import net.imagej.ops.slicer.CroppedIterableInterval;
+import net.imagej.ops.slicer.Hyperslice;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.IterableInterval;
@@ -180,9 +180,9 @@ public class CosmPsfWrapperOp implements Psf
 		 
 		 // set up the axis so the resulting hyperslices are x,y,z and 
 		 // we loop through channels and time
-		 int[] axisIndices=new int[]{0,1,2};
+		 int[] axisIndices=new int[]{0,1,2};  
 		 	
-		 CroppedIterableInterval hyperSlices= new CroppedIterableInterval(ops, output,
+		 Hyperslice hyperSlices= new Hyperslice(ops, output,
 				 axisIndices);
 
 		 Cursor<RandomAccessibleInterval<?>> c=hyperSlices.cursor();

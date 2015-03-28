@@ -1,6 +1,7 @@
 package com.deconware.ops.dimensions;
 
 import net.imagej.ops.AbstractFunction;
+import net.imagej.ops.AbstractStrictFunction;
 import net.imagej.ops.Op;
 import net.imagej.ops.OpService;
 import net.imglib2.img.Img;
@@ -20,7 +21,7 @@ import com.deconware.algorithms.fft.SimpleFFTFactory.FFTTarget;
 
 @Plugin(type = Op.class, name = Extend.NAME, priority=Priority.HIGH_PRIORITY+1)
 public class ExtendOpImgPlusImgPlus <T extends RealType<T>> extends
-AbstractFunction<ImgPlus<T>, ImgPlus<T>>  {
+AbstractStrictFunction<ImgPlus<T>, ImgPlus<T>>  {
 	
 	@Parameter
 	OpService ops;

@@ -1,12 +1,12 @@
 package com.deconware.ops;
 
-import net.imagej.ops.AbstractFunction;
+import net.imagej.ops.AbstractStrictFunction;
 import net.imglib2.type.numeric.RealType;
 
 import net.imglib2.RandomAccessibleInterval;
 
 public class IndexOpRaiRai<T extends RealType<T>> 
-	extends AbstractFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
+	extends AbstractStrictFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
 {
 	public RandomAccessibleInterval<T> compute(RandomAccessibleInterval<T> in, RandomAccessibleInterval<T> out)
 	{
