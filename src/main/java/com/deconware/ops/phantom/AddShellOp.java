@@ -11,6 +11,8 @@ import com.deconware.algorithms.phantom.Phantoms;
 @Plugin(type = Op.class, name = AddShell.NAME, priority = Priority.HIGH_PRIORITY)
 public class AddShellOp extends AddShape implements AddSphere
 {
+	@Parameter
+	double background;
 	
 	@Parameter
 	int outerRadius;
@@ -23,7 +25,7 @@ public class AddShellOp extends AddShape implements AddSphere
 	{
 		// draw the shell
 		Phantoms.drawSphere(interval, center, (int)outerRadius, intensity);
-		Phantoms.drawSphere(interval, center, (int)innerRadius, 0.0);
+		Phantoms.drawSphere(interval, center, (int)innerRadius, background);
 	}
 }
 
