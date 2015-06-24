@@ -74,6 +74,18 @@ public class RichardsonLucyTVImg<I extends RealType<I>, O extends RealType<O>, K
 	float regularizationFactor = 0.01f;
 
 	/**
+	 * indicates whether to use non-circulant edge handling
+	 */
+	@Parameter(required = false)
+	private boolean nonCirculant = false;
+
+	/**
+	 * indicates whether to use acceleration
+	 */
+	@Parameter(required = false)
+	private boolean accelerate = false;
+
+	/**
 	 * run RichardsonLucyTVRAI
 	 */
 	@Override
@@ -91,10 +103,11 @@ public class RichardsonLucyTVImg<I extends RealType<I>, O extends RealType<O>, K
 			k[i] = input.dimension(i);
 			l[i] = getKernel().dimension(i);
 		}
-		
+
 		ops.run(RichardsonLucyTVRAI.class, raiExtendedInput, raiExtendedKernel,
 			fftImg, fftKernel, output, true, true, maxIterations,
-			imgConvolutionInterval, output.factory(), k, l, regularizationFactor);
+			imgConvolutionInterval, output.factory(), k, l, nonCirculant, accelerate,
+			regularizationFactor);
 
 	}
 }
