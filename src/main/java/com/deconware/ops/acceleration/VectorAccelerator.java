@@ -74,7 +74,6 @@ public class VectorAccelerator<T extends RealType<T>> implements Accelerator<T>
 			Type<T> type = Util.getTypeFromInterval(yk_iterated);
 			yk_prediction = imgFactory.create(dimensions, type.createVariable());
 			xkm1_previous = imgFactory.create(dimensions, type.createVariable());
-			yk_prediction = imgFactory.create(dimensions, type.createVariable());
 			gk = imgFactory.create(dimensions, type.createVariable());
 			hk_vector = imgFactory.create(dimensions, type.createVariable());
 
@@ -87,13 +86,22 @@ public class VectorAccelerator<T extends RealType<T>> implements Accelerator<T>
 
 		StaticFunctions.showStats(yk_iterated);
 		// StaticFunctions.showStats(yk_prediction);
+		
+		boolean reset=false;
 
 		// use the iterated prediction and the previous value of the prediction
 		// to calculate the acceleration factor
 		if (yk_prediction != null) {
-			// StaticFunctions.showStats(yk_iterated);
-			// StaticFunctions.showStats(yk_prediction);
+			 
+			System.out.println("PREDICTION------------------------------");
+			System.out.println("stats yk_iterated");
+			StaticFunctions.showStats(yk_iterated);
+			
+			System.out.println("stats yk_prediciton");
+			StaticFunctions.showStats(yk_prediction);
 
+			System.out.println("PREDICTION OVER------------------------------");
+			
 			accelerationFactor =
 				computeAccelerationFactor(yk_iterated, yk_prediction);
 
@@ -101,6 +109,7 @@ public class VectorAccelerator<T extends RealType<T>> implements Accelerator<T>
 
 			if ((accelerationFactor < 0)) {
 				// xkm1_previous = null;
+				reset=true;
 				gkm1 = null;
 				accelerationFactor = 0.0;
 			}
@@ -115,7 +124,7 @@ public class VectorAccelerator<T extends RealType<T>> implements Accelerator<T>
 
 		// calculate the change vector between x and x previous
 		// if (xkm1_previous != null) {
-		if (accelerationFactor > 0) {
+		if ( (reset==false) && (xkm1_previous!=null) )  {
 			// hk_vector=StaticFunctions.Subtract(xk_estimate, xkm1_previous);
 			Subtract(xk_estimate, xkm1_previous, hk_vector);
 
@@ -129,17 +138,39 @@ public class VectorAccelerator<T extends RealType<T>> implements Accelerator<T>
 
 			// TODO: Revisit where initialization should be done
 			initialize(yk_iterated);
+			
+			System.out.println("RESET------------------------------");
+			
+			System.out.println("xk_estimate: stats");	
+			StaticFunctions.showStats(xk_estimate);
+			System.out.println("yk_prediction: stats");
+			StaticFunctions.showStats(yk_prediction);
+			
 
 			Copy(xk_estimate, yk_prediction);
+			System.out.println("yk_prediction: stats");
+			StaticFunctions.showStats(yk_prediction);
+			
+			System.out.println("RESET_OVER------------------------------");
 		}
-
+		
+		System.out.println("STATS------------------------------");
+		
 		// make a copy of the estimate to use as previous next time
 		// xkm1_previous=xk_estimate.copy();
 		Copy(xk_estimate, xkm1_previous);
-
+		
+		System.out.println("yk_iterated: stats");	
 		StaticFunctions.showStats(yk_iterated);
+		
+		System.out.println("xk_estimate: stats");	
+		StaticFunctions.showStats(xk_estimate);
+		
+		System.out.println("yk_prediction: stats");
 		StaticFunctions.showStats(yk_prediction);
 
+		System.out.println("STATS_OVER------------------------------");
+		
 		// HACK: TODO: look over how to transfer the memory
 		// copy prediction
 		Copy(yk_prediction, yk_iterated);
@@ -154,16 +185,33 @@ public class VectorAccelerator<T extends RealType<T>> implements Accelerator<T>
 	{
 		// gk=StaticFunctions.Subtract(yk_iterated, yk_prediction);
 		Subtract(yk_iterated, yk_prediction, gk);
+		
+		
 
 		if (gkm1 != null) {
+			System.out.println("Acceleration------------------");
+			System.out.println("GK1 stats");
+			StaticFunctions.showStats(gk);
+			System.out.println("GKM1 stats");
+			
+			StaticFunctions.showStats(gkm1);
+			
 			double numerator = DotProduct(gk, gkm1);
 			double denominator = DotProduct(gkm1, gkm1);
 
 			gkm1 = gk.copy();
+			
+			System.out.println("numerator: "+numerator);
+			System.out.println("denominator: "+numerator);
+			
+			
+			System.out.println("END-- Acceleration------------------");
+			
 
 			return numerator / denominator;
 
 		}
+		
 
 		gkm1 = gk.copy();
 
@@ -198,34 +246,39 @@ public class VectorAccelerator<T extends RealType<T>> implements Accelerator<T>
 	protected void Copy(RandomAccessibleInterval<T> a,
 		RandomAccessibleInterval<T> b)
 	{
+		
+	
 
 		final Cursor<T> cursorA = Views.iterable(a).cursor();
 		final Cursor<T> cursorB = Views.iterable(b).cursor();
+		
+		int i=0;
 
 		while (cursorA.hasNext()) {
+			i++;
 			cursorA.fwd();
 			cursorB.fwd();
 
 			cursorB.get().set(cursorA.get());
-		}
+		}		
 	}
 
 	// TODO replace with op.
 	protected void Subtract(RandomAccessibleInterval<T> a,
-		RandomAccessibleInterval<T> input, RandomAccessibleInterval<T> output)
+		RandomAccessibleInterval<T> b, RandomAccessibleInterval<T> output)
 	{
 
 		final Cursor<T> cursorA = Views.iterable(a).cursor();
-		final Cursor<T> cursorInput = Views.iterable(input).cursor();
+		final Cursor<T> cursorB = Views.iterable(b).cursor();
 		final Cursor<T> cursorOutput = Views.iterable(output).cursor();
 
 		while (cursorA.hasNext()) {
 			cursorA.fwd();
-			cursorInput.fwd();
+			cursorB.fwd();
 			cursorOutput.fwd();
 
 			cursorOutput.get().set(cursorA.get());
-			cursorOutput.get().sub(cursorInput.get());
+			cursorOutput.get().sub(cursorB.get());
 		}
 	}
 

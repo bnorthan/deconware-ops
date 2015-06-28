@@ -131,14 +131,15 @@ public class RichardsonLucyTVRAI<I extends RealType<I>, O extends RealType<O>, K
 		Img<O> div_unit_grad = div_unit_grad_fast_thread();
 		long fasttime = System.currentTimeMillis() - start;
 
-		System.out
+	/*	System.out
 			.println("--------------------------------------------------------------");
 		System.out.println("r factor: " + regularizationFactor +
 			"variation time: " + fasttime);
 		System.out.println("k factor: " + getK()[0] + " l factor: " + getL()[1]);
 		System.out
 			.println("--------------------------------------------------------------");
-
+*/
+		
 		final Cursor<O> cursorCorrelation =
 			Views.iterable(getRAIExtendedReblurred()).cursor();
 
@@ -458,8 +459,8 @@ public class RichardsonLucyTVRAI<I extends RealType<I>, O extends RealType<O>, K
 					}// end k
 					long totaltime = System.currentTimeMillis() - starttime;
 
-					System.out.println("time for me (dug) (" + myNumber + ") is: " +
-						totaltime);
+				//	System.out.println("time for me (dug) (" + myNumber + ") is: " +
+					//	totaltime);
 				}// end run
 			});
 		}

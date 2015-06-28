@@ -70,6 +70,9 @@ public class RichardsonLucyTVImg<I extends RealType<I>, O extends RealType<O>, K
 	@Parameter
 	int maxIterations;
 
+	/**
+	 * the regularization factor determines smoothness of solution
+	 */
 	@Parameter
 	float regularizationFactor = 0.01f;
 
