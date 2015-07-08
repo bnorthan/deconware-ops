@@ -96,6 +96,8 @@ public class RichardsonLucyTVImg<I extends RealType<I>, O extends RealType<O>, K
 		RandomAccessibleInterval<K> raiExtendedKernel, Img<C> fftImg,
 		Img<C> fftKernel, Img<O> output, Interval imgConvolutionInterval)
 	{
+		
+		System.out.println("deconware RLTV!");
 
 		Img<I> input = this.getInput();
 
