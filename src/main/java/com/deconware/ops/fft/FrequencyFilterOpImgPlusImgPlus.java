@@ -15,7 +15,7 @@ import net.imglib2.meta.Axes;
 import net.imagej.ops.Contingent;
 import net.imagej.ops.Op;
 import net.imagej.ops.OpService;
-import net.imagej.ops.slicer.Hyperslice;
+import net.imagej.ops.slicewise.Hyperslice;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;

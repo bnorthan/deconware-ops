@@ -1,7 +1,7 @@
 package com.deconware.ops.dimensions;
 
-import net.imagej.ops.AbstractFunction;
-import net.imagej.ops.AbstractStrictFunction;
+import net.imagej.ops.AbstractComputerOp;
+import net.imagej.ops.AbstractComputerOp;
 import net.imagej.ops.Op;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.numeric.RealType;
@@ -30,7 +30,7 @@ import net.imglib2.RandomAccessibleInterval;
  */
 @Plugin(type = Op.class, name = Extend.NAME, priority=Priority.HIGH_PRIORITY+1)
 public class ExtendOpRaiRai <T extends RealType<T>> extends
-AbstractStrictFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>  {
+AbstractComputerOp<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>  {
 	
 	@Parameter
 	int[] extension;
@@ -45,7 +45,7 @@ AbstractStrictFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
 	FFTTarget fftTarget;
 	
 	@Override
-	public RandomAccessibleInterval<T> compute(RandomAccessibleInterval<T> input,
+	public void compute(RandomAccessibleInterval<T> input,
 		RandomAccessibleInterval<T> output)
 	{
 		
@@ -74,7 +74,7 @@ AbstractStrictFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
 			cursorOut.get().set(cursorIn.get());
 		}
 		
-		return output;
+		//return output;
 	}
 	
 	void setExtension(int[] extension)

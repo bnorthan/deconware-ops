@@ -1,9 +1,9 @@
 package com.deconware.ops;
 
 import net.imglib2.img.Img;
-import net.imagej.ops.AbstractFunction;
+import net.imagej.ops.AbstractComputerOp;
 
-public abstract class AbstractFunctionWithOutputInializer<I, O> extends AbstractFunction<I, O>{
+public abstract class AbstractFunctionWithOutputInializer<I, O> extends AbstractComputerOp<I, O>{
 		
 	@Override
 	public void run()

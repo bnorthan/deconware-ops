@@ -6,7 +6,7 @@ import com.deconware.ops.SpatialIterableInterval;
 import com.deconware.ops.phantom.PhantomTest;
 
 import net.imagej.ops.Op;
-import net.imagej.ops.slicer.Hyperslice;
+import net.imagej.ops.slicewise.Hyperslice;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;

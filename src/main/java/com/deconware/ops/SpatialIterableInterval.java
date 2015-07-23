@@ -1,7 +1,7 @@
 package com.deconware.ops;
 
 import net.imagej.ops.OpService;
-import net.imagej.ops.slicer.Hyperslice;
+import net.imagej.ops.slicewise.Hyperslice;
 
 import java.util.ArrayList;
 

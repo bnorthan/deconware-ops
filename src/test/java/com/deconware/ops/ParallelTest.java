@@ -5,7 +5,7 @@ import net.imglib2.Cursor;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imagej.ops.Op;
-import net.imagej.ops.arithmetic.add.parallel.AddConstantToArrayDoubleImageP;
+import net.imagej.ops.math.add.AddConstantToArrayDoubleImageP;
 
 import org.junit.Test;
 import org.junit.Assert;

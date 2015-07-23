@@ -1,8 +1,8 @@
 package com.deconware.ops.statistics;
 
 import net.imagej.ops.Op;
-import net.imagej.ops.statistics.Sum;
-import net.imagej.ops.AbstractStrictFunction;
+import net.imagej.ops.Ops.Stats.Sum;
+import net.imagej.ops.AbstractComputerOp;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 
@@ -20,11 +20,11 @@ import com.deconware.algorithms.parallel.math.ParallelSum;
 */
 @Plugin(type = Op.class, name = Sum.NAME, priority = Priority.HIGH_PRIORITY + 10)
 public class SumRealTypeParallel<T extends RealType<T>, V extends RealType<V>> extends
-	AbstractStrictFunction<IterableInterval<T>, V> implements Sum<IterableInterval<T>, V>, Contingent 
+	AbstractComputerOp<IterableInterval<T>, V> implements Sum, Contingent 
 {
 
 	@Override
-	public V compute(IterableInterval<T> image, V value) 
+	public void compute(IterableInterval<T> image, V value) 
 	{
 		ParallelSum<T, V> sum=new ParallelSum<T, V>(image);
 		
@@ -35,7 +35,6 @@ public class SumRealTypeParallel<T extends RealType<T>, V extends RealType<V>> e
 		
 		value.set(output);
 		
-		return value;
 	}
 	
 	@Override

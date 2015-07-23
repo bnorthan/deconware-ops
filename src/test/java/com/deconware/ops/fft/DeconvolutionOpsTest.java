@@ -10,7 +10,7 @@ import org.junit.Assert;
 import com.deconware.ops.AbstractOpsTest;
 
 import net.imagej.ops.Op;
-import net.imagej.ops.create.DefaultCreateImg;
+import net.imagej.ops.create.img.DefaultCreateImg;
 
 public class DeconvolutionOpsTest extends AbstractOpsTest {
 

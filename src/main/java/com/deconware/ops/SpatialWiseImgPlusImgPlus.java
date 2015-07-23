@@ -2,7 +2,7 @@ package com.deconware.ops;
 
 /*
 
-import net.imagej.ops.AbstractFunction;
+import net.imagej.ops.AbstractComputerOp;
 import net.imagej.ops.Function;
 import net.imagej.ops.Op;
 import net.imagej.ops.OpService;
@@ -19,7 +19,7 @@ import org.scijava.plugin.Plugin;
 @Plugin(type = Op.class, name = SpatialWise.NAME,
 	priority = Priority.VERY_HIGH_PRIORITY)
 public class SpatialWiseImgPlusImgPlus<I, O> extends
-	AbstractFunction<ImgPlus<I>, ImgPlus<O>>
+	AbstractComputerOp<ImgPlus<I>, ImgPlus<O>>
 	implements
 	SpatialWise<ImgPlus<I>, ImgPlus<O>>
 {

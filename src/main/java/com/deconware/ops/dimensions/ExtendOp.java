@@ -1,6 +1,6 @@
 package com.deconware.ops.dimensions;
 
-import net.imagej.ops.AbstractStrictFunction;
+import net.imagej.ops.AbstractComputerOp;
 import net.imagej.ops.Op;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
@@ -25,7 +25,7 @@ import com.deconware.algorithms.fft.SimpleFFTFactory.FFTTarget;
  */
 @Plugin(type = Op.class, name = Extend.NAME)
 public class ExtendOp <T extends RealType<T>> extends
-	AbstractStrictFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> implements Extend
+	AbstractComputerOp<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> implements Extend
 {
 	@Parameter
 	int[] axisIndices;
@@ -40,12 +40,12 @@ public class ExtendOp <T extends RealType<T>> extends
 	FFTTarget fftTarget;
 	
 	@Override
-	public RandomAccessibleInterval<T> compute(RandomAccessibleInterval<T> input,
+	public void compute(RandomAccessibleInterval<T> input,
 		RandomAccessibleInterval<T> output)
 	{
 		if (axisIndices.length!=extension.length)
 		{
-			return null;
+			//return null;
 		}
 		
 		ExtendImageUtility<T> utility=new ExtendImageUtility<T>(axisIndices, extension, input, ExtensionType.EXTENSION, boundaryType, fftTarget);
@@ -56,6 +56,6 @@ public class ExtendOp <T extends RealType<T>> extends
 		
 		final RandomAccessibleInterval<T> extendedInput = Views.offsetInterval(temp, utility.getOffset(), utility.getNewDimensions());
 		
-		return extendedInput;
+		//return extendedInput;
 	}
 }

@@ -2,7 +2,7 @@ package com.deconware.ops.psf;
 
 import net.imagej.ops.Op;
 import net.imagej.ops.OpService;
-import net.imagej.ops.slicer.Hyperslice;
+import net.imagej.ops.slicewise.Hyperslice;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.IterableInterval;

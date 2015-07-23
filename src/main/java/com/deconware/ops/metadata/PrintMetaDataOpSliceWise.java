@@ -12,7 +12,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.Cursor;
 import net.imglib2.type.numeric.RealType;
 
-import net.imagej.ops.slicer.Hyperslice;
+import net.imagej.ops.slicewise.Hyperslice;
 
 @Plugin(type = Op.class, name = "metadata", priority = Priority.HIGH_PRIORITY)
 public class PrintMetaDataOpSliceWise <T extends RealType<T>> implements Op 

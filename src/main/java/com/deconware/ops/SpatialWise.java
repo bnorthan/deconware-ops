@@ -1,6 +1,6 @@
 package com.deconware.ops;
 
-import net.imagej.ops.Function;
+import net.imagej.ops.ComputerOp;
 
 /**
  * Base interface for "slicewise" operations.
@@ -16,7 +16,7 @@ import net.imagej.ops.Function;
  * @author Christian Dietz
  * @author Martin Horn
  */
-public interface SpatialWise<I, O> extends Function<I, O> {
+public interface SpatialWise<I, O> extends ComputerOp<I, O> {
 
 	// NB: Marker interface.
 	public static final String NAME = "spatialwise";

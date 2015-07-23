@@ -1,14 +1,14 @@
 package com.deconware.ops;
 
-import net.imagej.ops.AbstractStrictFunction;
+import net.imagej.ops.AbstractComputerOp;
 import net.imglib2.type.numeric.RealType;
 
 import net.imglib2.RandomAccessibleInterval;
 
 public class IndexOpRaiRai<T extends RealType<T>> 
-	extends AbstractStrictFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
+	extends AbstractComputerOp<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
 {
-	public RandomAccessibleInterval<T> compute(RandomAccessibleInterval<T> in, RandomAccessibleInterval<T> out)
+	public void compute(RandomAccessibleInterval<T> in, RandomAccessibleInterval<T> out)
 	{
 		long min[]=new long[in.numDimensions()];
 		long max[]=new long[in.numDimensions()];
@@ -25,6 +25,6 @@ public class IndexOpRaiRai<T extends RealType<T>>
 		System.out.println("in: "+in.numDimensions()+" min/max: "+min[0]+":"+max[0]);
 		System.out.println("outs: "+in.numDimensions()+" min/max: "+outmin[0]+":"+outmax[0]);
 		
-		return null;
+		//return null;
 	}
 }

@@ -18,7 +18,7 @@ import org.junit.Assert;
 import java.lang.Math;
 
 import net.imagej.ops.OpService;
-import net.imagej.ops.create.DefaultCreateImg;
+import net.imagej.ops.create.img.DefaultCreateImg;
 
 import com.deconware.ops.AbstractOpsTest;
 

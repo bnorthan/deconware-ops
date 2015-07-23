@@ -1,7 +1,7 @@
 package com.deconware.ops.statistics;
 
 import net.imagej.ops.Op;
-import net.imagej.ops.statistics.Sum;
+import net.imagej.ops.Ops.Stats.Sum;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
